@@ -167,6 +167,34 @@ def day4part2(bingo):
             f'Score: {score}')
 
 
+def day5(vents):
+    diagram = set()
+    dangerous_area = set()
+    for line in vents:
+        (x1, y1), (x2, y2) = tuple(map(lambda p: tuple(map(int, p.split(','))), line.strip().split(' -> ')))
+
+        if x1 == x2 or y1 == y2:
+            y1, y2 = sorted((y1, y2))
+            for x in range(min(x1, x2), max(x1, x2) + 1):
+                for y in range(min(y1, y2), max(y1, y2) + 1):
+                    if (x, y) not in diagram:
+                        diagram.add((x, y))
+                    else:
+                        dangerous_area.add((x, y))
+        else:
+            step_x = int(x2 > x1) or -1
+            step_y = int(y2 > y1) or -1
+            for i in range(abs(x2 - x1) + 1):
+                x = x1 + i * step_x
+                y = y1 + i * step_y
+                if (x, y) not in diagram:
+                    diagram.add((x, y))
+                else:
+                    dangerous_area.add((x, y))
+
+    print(f'Number of dangerous areas: {len(dangerous_area)}')
+
+
 if __name__ == '__main__':
     # day1(read('samples/day1', map_fn=lambda x: int(x)))
     # day1(read('puzzles/day1', map_fn=lambda x: int(x)))
@@ -176,5 +204,7 @@ if __name__ == '__main__':
     # day3part1(read('puzzles/day3', map_fn=lambda x: x))
     # day3part2(read('puzzles/day3', map_fn=lambda x: x))  # Oxygen: 825, Co2: 3375 => Life support rating: 2784375
     # day4part1(read('samples/day4', map_fn=lambda x: x))
-    day4part1(read('puzzles/day4', map_fn=lambda x: x))  # Board: 41 Last num: 48 Unmarked sum: 932 Score: 44736
-    day4part2(read('puzzles/day4', map_fn=lambda x: x))  # Board: 0 Last number: 7 Unmarked sum: 261 Score: 1827
+    # day4part1(read('puzzles/day4', map_fn=lambda x: x))  # Board: 41 Last num: 48 Unmarked sum: 932 Score: 44736
+    # day4part2(read('puzzles/day4', map_fn=lambda x: x))  # Board: 0 Last number: 7 Unmarked sum: 261 Score: 1827
+    day5(read('samples/day5', map_fn=lambda x: x))
+    day5(read('puzzles/day5', map_fn=lambda x: x))  # 7436
